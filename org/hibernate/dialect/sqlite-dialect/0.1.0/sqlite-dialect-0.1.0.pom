@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.hibernate.dialect</groupId>
+  <artifactId>sqlite-dialect</artifactId>
+  <packaging>jar</packaging>
+  <version>0.1.0</version>
+  <name>SQLite dialect for Hibernate</name>
+  <description>SQLite dialect for Hibernate (fork from gwenn Dialect work )</description>
+  <url>https://opensource4all.com/gwenn/sqlite-dialect</url>
+
+  <licenses>
+    <license>
+      <name>Public domain</name>
+      <url>http://unlicense.org/</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+
+  <issueManagement>
+    <system>github</system>
+    <url>https://github.com/opensource4all/sqlite-dialect/issues</url>
+  </issueManagement>
+
+  <scm>
+    <connection>scm:git:https://github.com/opensource4all/sqlite-dialect.git</connection>
+    <developerConnection>scm:git:git@github.com:opensource4all/sqlite-dialect.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/opensource4all/sqlite-dialect</url>
+  </scm>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+    <github.global.server>github</github.global.server>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.2.10.Final</version>
+    </dependency>
+  </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <name>Temporary Staging Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+  </distributionManagement>
+
+  <pluginRepositories>
+  </pluginRepositories>
+
+  
+  <build>
+  <plugins>
+    <plugin>
+      <artifactId>maven-deploy-plugin</artifactId>
+      <version>2.8.1</version>
+      <configuration>
+        <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+      </configuration>
+    </plugin>
+
+    <plugin>
+      <groupId>com.github.github</groupId>
+      <artifactId>site-maven-plugin</artifactId>
+      <version>0.11</version>
+      <configuration>
+        <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+        <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+        <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+        <includes><include>**/*</include></includes>
+        <repositoryName>sqlite-dialect</repositoryName>      <!-- github repo name -->
+        <repositoryOwner>opensource4all</repositoryOwner>    <!-- github username  -->
+      </configuration>
+      <executions>
+        <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+        <execution>
+          <goals>
+            <goal>site</goal>
+          </goals>
+          <phase>deploy</phase>
+        </execution>
+      </executions>
+    </plugin>
+
+  </plugins>
+  </build>
+
+
+</project>
